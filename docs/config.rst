@@ -173,6 +173,23 @@ The following configuration values are used internally by Flask:
 
     Default: ``False``
 
+.. py:data:: SESSION_COOKIE_PARTITIONED
+
+    Browsers will send cookies based on the top-level document's domain, rather
+    than only the domain of the document setting the cookie. This prevents third
+    party cookies set in iframes from "leaking" between separate sites.
+
+    Browsers are beginning to disallow non-partitioned third party cookies, so
+    you need to mark your cookies partitioned if you expect them to work in such
+    embedded situations.
+
+    Enabling this implicitly enables :data:`SESSION_COOKIE_SECURE` as well, as
+    it is only valid when served over HTTPS.
+
+    Default: ``False``
+
+    .. versionadded:: 3.1
+
 .. py:data:: SESSION_COOKIE_SAMESITE
 
     Restrict how cookies are sent with requests from external sites. Can
@@ -259,11 +276,53 @@ The following configuration values are used internally by Flask:
 
 .. py:data:: MAX_CONTENT_LENGTH
 
-    Don't read more than this many bytes from the incoming request data. If not
-    set and the request does not specify a ``CONTENT_LENGTH``, no data will be
-    read for security.
+    The maximum number of bytes that will be read during this request. If
+    this limit is exceeded, a 413 :exc:`~werkzeug.exceptions.RequestEntityTooLarge`
+    error is raised. If it is set to ``None``, no limit is enforced at the
+    Flask application level. However, if it is ``None`` and the request has no
+    ``Content-Length`` header and the WSGI server does not indicate that it
+    terminates the stream, then no data is read to avoid an infinite stream.
+
+    Each request defaults to this config. It can be set on a specific
+    :attr:`.Request.max_content_length` to apply the limit to that specific
+    view. This should be set appropriately based on an application's or view's
+    specific needs.
 
     Default: ``None``
+
+    .. versionadded:: 0.6
+
+.. py:data:: MAX_FORM_MEMORY_SIZE
+
+    The maximum size in bytes any non-file form field may be in a
+    ``multipart/form-data`` body. If this limit is exceeded, a 413
+    :exc:`~werkzeug.exceptions.RequestEntityTooLarge` error is raised. If it is
+    set to ``None``, no limit is enforced at the Flask application level.
+
+    Each request defaults to this config. It can be set on a specific
+    :attr:`.Request.max_form_memory_parts` to apply the limit to that specific
+    view. This should be set appropriately based on an application's or view's
+    specific needs.
+
+    Default: ``500_000``
+
+    .. versionadded:: 3.1
+
+.. py:data:: MAX_FORM_PARTS
+
+    The maximum number of fields that may be present in a
+    ``multipart/form-data`` body. If this limit is exceeded, a 413
+    :exc:`~werkzeug.exceptions.RequestEntityTooLarge` error is raised. If it
+    is set to ``None``, no limit is enforced at the Flask application level.
+
+    Each request defaults to this config. It can be set on a specific
+    :attr:`.Request.max_form_parts` to apply the limit to that specific view.
+    This should be set appropriately based on an application's or view's
+    specific needs.
+
+    Default: ``1_000``
+
+    .. versionadded:: 3.1
 
 .. py:data:: TEMPLATES_AUTO_RELOAD
 
