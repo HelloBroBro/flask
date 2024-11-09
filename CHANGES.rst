@@ -5,7 +5,7 @@ Unreleased
 
 -   Drop support for Python 3.8. :pr:`5623`
 -   Update minimum dependency versions to latest feature releases.
-    Werkzeug >= 3.1, ItsDangerous >= 2.2, Blinker >= 1.8. :pr:`5624`
+    Werkzeug >= 3.1, ItsDangerous >= 2.2, Blinker >= 1.9. :pr:`5624,5633`
 -   Provide a configuration option to control automatic option
     responses. :pr:`5496`
 -   ``Flask.open_resource``/``open_instance_resource`` and
@@ -20,6 +20,9 @@ Unreleased
 -   ``-e path`` takes precedence over default ``.env`` and ``.flaskenv`` files.
     ``load_dotenv`` loads default files in addition to a path unless
     ``load_defaults=False`` is passed. :issue:`5628`
+-   Support key rotation with the ``SECRET_KEY_FALLBACKS`` config, a list of old
+    secret keys that can still be used for unsigning. Extensions will need to
+    add support. :issue:`5621`
 
 
 Version 3.0.3
